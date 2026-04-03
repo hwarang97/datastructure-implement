@@ -110,11 +110,17 @@ int insertSortedLL(LinkedList *ll, int item)
 	new_node->next = NULL; // must init NULL
 
 	// find where to insert
-	while (current != NULL && current->item <= item)
+	while (current != NULL && current->item < item)
 	{
 		prev = current;
 		current = current->next;
 		i++;
+	}
+
+	// same item
+	if (current != NULL && current->item == item)
+	{
+		return -1;
 	}
 
 	new_node->next = current;
