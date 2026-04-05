@@ -85,8 +85,9 @@ int main()
 void moveEvenItemsToBack(LinkedList *ll)
 {
 	/*
-	link even to even, link odd to odd.
-	link last odd to even head.
+	track odd number by odd_tail
+	track even number by even_tail
+	concat odd_tail and even_head
 	*/
 
 	// empty case
@@ -96,55 +97,60 @@ void moveEvenItemsToBack(LinkedList *ll)
 	}
 
 	ListNode *current = ll->head;
-	ListNode *prev = NULL;
+	ListNode *next = NULL;
+	ListNode *odd_head = NULL;
+	ListNode *odd_tail = NULL;
 	ListNode *even_head = NULL;
-	ListNode *even_current = NULL;
+	ListNode *even_tail = NULL;
 
 	while (current != NULL)
 	{
-		if (current->item % 2 == 0)
-		{
-			// if head points even number, move forward
-			if (ll->head == current)
-			{
-				ll->head = current->next;
-			}
 
+		next = current->next;
+
+		// unlink node
+		current->next = NULL;
+
+		if (current->item % 2 != 0)
+		{
+			// track odd number
+			if (odd_head == NULL)
+			{
+				odd_head = current;
+				odd_tail = current;
+			}
+			else
+			{
+				odd_tail->next = current;
+				odd_tail = odd_tail->next;
+			}
+		}
+		else
+		{
 			// track even number
 			if (even_head == NULL)
 			{
 				even_head = current;
-				even_current = current;
+				even_tail = current;
 			}
 			else
 			{
-				even_current->next = current;
-				even_current = even_current->next;
+				even_tail->next = current;
+				even_tail = even_tail->next;
 			}
+		}
 
-			// link even to even, odd by odd
-			current = current->next;
-			if (prev != NULL)
-			{
-				prev->next = current;
-			}
-			even_current->next = NULL;
-		}
-		else
-		{
-			prev = current;
-			current = current->next;
-		}
+		current = next;
 	}
 
-	// only even case
-	if (ll->head == NULL)
+	if (odd_head == NULL)
 	{
 		ll->head = even_head;
 	}
 	else
 	{
-		prev->next = even_head;
+		ll->head = odd_head;
+		odd_tail->next = even_head;
 	}
 }
 
