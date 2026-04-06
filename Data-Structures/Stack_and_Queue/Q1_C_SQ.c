@@ -136,7 +136,27 @@ void createQueueFromLinkedList(LinkedList *ll, Queue *q)
 
 void removeOddValues(Queue *q)
 {
-	/* add your code here */
+	Queue only_even_q;
+	if (q == NULL || q->ll.head == NULL)
+	{
+		return;
+	}
+
+	only_even_q.ll.head = NULL;
+	only_even_q.ll.size = 0;
+	while (q->ll.head != NULL)
+	{
+		int item = dequeue(q);
+		if (item != -1 && item % 2 == 0)
+		{
+			enqueue(&only_even_q, item);
+		}
+	}
+
+	while (only_even_q.ll.head != NULL)
+	{
+		enqueue(q, dequeue(&only_even_q));
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////////
